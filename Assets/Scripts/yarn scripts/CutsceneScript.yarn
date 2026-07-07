@@ -34,6 +34,7 @@ Lashes fluttered towards the neck of her gifted spruce violin. Her fingers dance
 She played notes of Heaven from her shoulder, enchanting the nation as much as a young prodigy could.
 My hands shook across piano keys while I struggled to keep up. I was confused. I didn't know yet what I wanted from life.
 All I knew in that instance was that I wanted <i>her</i>.
+<<stopCGmusic 0>>
 <<jump Dialogue1>>
 ===
 
@@ -133,10 +134,9 @@ Whatever I did, it looks like it may have worked, in a roundabout way.
 title: Dialogue3
 ---
 <<showCG 2>>
-<<setVex vexHappy>>
 VEX: Oh my gosh. I wasn’t expecting this. How fascinating.
-<<setRobo roboScared>>
 EL1-5e: A-am. . . am I not to your satisfaction?
+<<stopCGmusic 0>>
 <<setVex vexThinking>>
 VEX: Hmm. That depends on whether you can help me out or not.
 <<setRobo roboBlush>>
@@ -342,6 +342,7 @@ VEX: Oh. . . yes! I do. I mean, I will. If neither of us are married then, that 
 VEX: Then they don’t have to know.
 I’d do anything to hear her play again.
 <<jump Dialogue5>>
+<<stopCGmusic 0>>
 ===
 
 title: Dialogue5
@@ -584,6 +585,7 @@ EL1-5e: What is my purpose? Am I truly something that’s worth bringing back to
 EL1-5e moves forward and locks her arms around my back in a surprising display of strength. I feel the instinctual need to move back, but she tugs her hands further up my shoulders and buries her nose in my neck.
 I haven’t been embraced or touched like this since. . .
 What is happening to me?
+<<stopCGmusic 0>>
 <<showCG 0>>
 <<setVex vexNeutral>>
 VEX: Oh, EL1-5e. . .
@@ -720,13 +722,13 @@ I’m the only person who can care for ELISE in a way that matters.
 VEX: I’ll never leave you, ELISE.
 VEX: You may not understand it now, but I hope you will the next time you see me, no matter what form you’re in.
 <<jump Dialogue10>>
+<<stopCGmusic 0>>
 <<endDialogue end>>
 ===
 
 title: Dialogue10
 ---
-<<handleFade 1>>
-<<showCG 0>>
+<<showCG 12>>
 <<setVex vexTired>>
 VEX: . . . Recording: Day 223. I’ve been making significant jumps in progress in the time since I last spoke with EL1-5e.
 VEX: I haven’t needed to power her on for quite some time. An awake mind is not necessary for the upgrades I’ve been doing.
@@ -746,9 +748,11 @@ VEX: But at the same time, I am. . .
 VEX: Terrified of the outcome.
 VEX: . . . . . . . . .
 VEX: I’ve got to power on EL1-5e.
+<<showCG 0>>
 <<setVex vexHappy>>
 VEX: Good morning, EL1-5e.
 <<setRobo roboScared>>
+<<playSound 15>>
 EL1-5e:. . . . . Good morning.
 <<setRobo roboSuprised>>
 EL1-5e: Am I. . . still needed, at this point in time?
@@ -960,7 +964,7 @@ EL1-5e: In lieu of personhood, I would like the privilege of identity.
 EL1-5e: TERESE.
 <<setRobo roboNeutral>>
 EL1-5e: When you think and refer to me, be it in your notes or when you tell ELISE about the body she’s been given, please refer to me as TERESE.
--> Call her Terese
+-> Call her TERESE
    <<jump choice4a>>
 -> Call her EL1-5e
    <<jump choice4b>>
@@ -969,7 +973,7 @@ EL1-5e: When you think and refer to me, be it in your notes or when you tell ELI
 title: choice4a
 ---
 <<set $endingAPoints to $endingAPoints + 1>>
-<<set $roboName to "Terese">>
+<<set $roboName to "TERESE">>
 <<hideSprites sprites>>
 A long beat of silence passes in the room, the only sounds emanating from the computers and the barely-perceptible sound of ELISE’s unconscious breaths.
 I can almost see my robotic subject counting the seconds left she’s got to live behind closed silicon lids.

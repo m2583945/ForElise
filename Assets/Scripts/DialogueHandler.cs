@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Device;
 using UnityEngine.UI;
@@ -24,6 +25,7 @@ namespace Yarn.Unity
         public Image portrait2;
         public Sprite[] vex;
         public Sprite[] robogirl;
+        public AudioClip[] cgmusic;
         public GameObject characterName;
         maintenance ma;
         soundEffects se;
@@ -37,6 +39,8 @@ namespace Yarn.Unity
         int eliseEnding = 0;
 
         public AudioSource endingMusic;
+        public AudioSource CGmusic;
+        bool firstTime3 = true;
 
 
         // Start is called before the first frame update
@@ -58,6 +62,7 @@ namespace Yarn.Unity
             dr.AddCommandHandler<int>("playSound", playSound);
             dr.AddCommandHandler<int>("showCG", showCG);
             dr.AddCommandHandler<int>("hideCG", hideCG);
+            dr.AddCommandHandler<int>("stopCGmusic", stopCGmusic);
             dr.AddCommandHandler<int>("pickChoice1", pickChoice1);
             dr.AddCommandHandler<int>("choice1", choice1);
             dr.AddCommandHandler<int>("handleFade", handleFade);
@@ -105,8 +110,40 @@ namespace Yarn.Unity
              * 9-11 - endings 1-3
              */
             cgbackground.gameObject.SetActive(true);
-            cgbackground.gameObject.GetComponent<Image>().sprite = cgImages[num];   
+            cgbackground.gameObject.GetComponent<Image>().sprite = cgImages[num];  
+            if(num == 1)
+            {
+                CGmusic.clip = cgmusic[0];
+                CGmusic.Play();
+            }
+            if(num == 2)
+            {
+                CGmusic.clip = cgmusic[1];
+                CGmusic.Play();
+            }
+            if (num == 3 && firstTime3 == true)
+            {
+                CGmusic.clip = cgmusic[2];
+                CGmusic.Play();
+                firstTime3 = false;
+            }
+            if (num == 5)
+            {
+                CGmusic.clip = cgmusic[3];
+                CGmusic.Play();
+            }
+            else
+            {
+                return;
+            }
+            
         }
+
+        public void stopCGmusic(int num)
+        {
+            CGmusic.Stop();
+        }
+        
 
         public void hideCG(int num)
         {
