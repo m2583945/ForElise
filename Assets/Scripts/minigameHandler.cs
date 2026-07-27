@@ -45,6 +45,7 @@ public class minigameHandler : MonoBehaviour
         dayValue = day;
         //minigames[0].gameObject.SetActive(true);
         disableAllGames();
+        dh.fadeMusicOut("dialogue");
         if(day == 1)
         {
             print("day 1 start");
@@ -69,6 +70,7 @@ public class minigameHandler : MonoBehaviour
     }
     public void endDay(int day)
     {
+        dh.fadeMusicIn("dialogue");
         print("endday");
         scenebg.SetActive(true);
         gameFrame.SetActive(false);

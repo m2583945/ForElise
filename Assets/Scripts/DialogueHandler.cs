@@ -23,9 +23,11 @@ namespace Yarn.Unity
         public Animator spriteAnimator;
         public Image portrait;
         public Image portrait2;
+        public Image portrait3;
         public Sprite[] vex;
         public Sprite[] robogirl;
         public AudioClip[] cgmusic;
+        
         public GameObject characterName;
         maintenance ma;
         soundEffects se;
@@ -40,6 +42,7 @@ namespace Yarn.Unity
 
         public AudioSource endingMusic;
         public AudioSource CGmusic;
+        public AudioSource dialogueMusic;
         bool firstTime3 = true;
 
 
@@ -54,6 +57,7 @@ namespace Yarn.Unity
             //vs = GameObject.FindFirstObjectByType<InMemoryVariableStorage>();
             dr.AddCommandHandler<string>("setVex", setVex);
             dr.AddCommandHandler<string>("setRobo", setRobo);
+            dr.AddCommandHandler<string>("setElise", setElise);
             dr.AddCommandHandler<string>("noName", noName);
             dr.AddCommandHandler<string>("hideSprites", hideSprites);
             dr.AddCommandHandler<string>("endDialogue", EndDialogue);
@@ -66,6 +70,8 @@ namespace Yarn.Unity
             dr.AddCommandHandler<int>("pickChoice1", pickChoice1);
             dr.AddCommandHandler<int>("choice1", choice1);
             dr.AddCommandHandler<int>("handleFade", handleFade);
+            dr.AddCommandHandler<string>("fadeMusicIn", fadeMusicIn);
+            dr.AddCommandHandler<string>("fadeMusicOut", fadeMusicOut);
             print("adding commands");
             //runNode("Cutscene1");
         }
@@ -77,6 +83,70 @@ namespace Yarn.Unity
             dr.AddCommandHandler<string>("noName", noName);
         }
 
+        public void fadeMusicIn(string musicName)
+        {
+            AudioSource music = new AudioSource();
+            if(musicName == "cg")
+            {
+                print("playing cg music");
+                music = CGmusic;
+            }
+            if (musicName == "dialogue")
+            {
+                music = dialogueMusic;
+            }
+            if (musicName == "ending")
+            {
+                music = endingMusic;
+            }
+            StartCoroutine(FadeIn(music, 3f));
+        }
+
+        public void fadeMusicOut(string musicName)
+        {
+            AudioSource music = new AudioSource();
+            if (musicName == "cg")
+            {
+                
+                music = CGmusic;
+            }
+            if (musicName == "dialogue")
+            {
+                music = dialogueMusic;
+            }
+            if (musicName == "ending")
+            {
+                music = endingMusic;
+            }
+            StartCoroutine(FadeOut(music, 2f));
+        }
+        public static IEnumerator FadeIn(AudioSource audioSource, float FadeTime)
+        {
+            float startVolume = audioSource.volume;
+            audioSource.volume = 0f;
+            audioSource.Play();
+            while (audioSource.volume < 0.3)
+            {
+                audioSource.volume += startVolume * Time.deltaTime / FadeTime;
+                yield return null;
+            }
+            
+            audioSource.volume = startVolume;
+        }
+        public static IEnumerator FadeOut(AudioSource audioSource, float FadeTime)
+        {
+            float startVolume = audioSource.volume;
+
+            while (audioSource.volume > 0)
+            {
+                audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+
+                yield return null;
+            }
+
+            audioSource.Stop();
+            audioSource.volume = startVolume;
+        }
         public void playEndingMusic(string mode)
         {
             if(mode == "play")
@@ -88,6 +158,8 @@ namespace Yarn.Unity
                 endingMusic.Stop();
             }
         }
+
+
 
 
         // Update is called once per frame
@@ -111,10 +183,19 @@ namespace Yarn.Unity
              */
             cgbackground.gameObject.SetActive(true);
             cgbackground.gameObject.GetComponent<Image>().sprite = cgImages[num];  
-            if(num == 1)
+
+            if(num == 0)
+            {  
+                fadeMusicOut("cg");
+                //dialogueMusic.Play();
+            }
+
+            if (num == 1)
             {
                 CGmusic.clip = cgmusic[0];
                 CGmusic.Play();
+
+                //fadeMusicIn("cg");
             }
             if(num == 2)
             {
@@ -124,10 +205,11 @@ namespace Yarn.Unity
             if (num == 3 && firstTime3 == true)
             {
                 CGmusic.clip = cgmusic[2];
+                fadeMusicIn("cg");
                 CGmusic.Play();
                 firstTime3 = false;
             }
-            if (num == 5)
+            if (num == 5 || num == 6)
             {
                 CGmusic.clip = cgmusic[3];
                 CGmusic.Play();
@@ -142,6 +224,7 @@ namespace Yarn.Unity
         public void stopCGmusic(int num)
         {
             CGmusic.Stop();
+            //fadeMusicIn("dialogue");
         }
         
 
@@ -164,6 +247,7 @@ namespace Yarn.Unity
             characterName.gameObject.SetActive(true);
             portrait2.gameObject.SetActive(true);
             portrait2.gameObject.GetComponent<Image>().enabled = true;
+            portrait3.gameObject.SetActive(false);
             if (cgbackground.gameObject.activeSelf == true)
             {
                 cgbackground.gameObject.SetActive(false);
@@ -214,8 +298,72 @@ namespace Yarn.Unity
             {
                 portrait2.gameObject.GetComponent<Image>().sprite = robogirl[9];
             }
+            if(spriteName == "roboDefiant")
+            {
+                portrait2.gameObject.GetComponent<Image>().sprite = robogirl[10];
+            }
+            if (spriteName == "roboScaredFists")
+            {
+                portrait2.gameObject.GetComponent<Image>().sprite = robogirl[11];
+            }
+            if (spriteName == "roboScaredYell")
+            {
+                portrait2.gameObject.GetComponent<Image>().sprite = robogirl[12];
+            }
+            if (spriteName == "roboScaredFistsYell")
+            {
+                portrait2.gameObject.GetComponent<Image>().sprite = robogirl[13];
+            }
+            if (spriteName == "roboWistful")
+            {
+                portrait2.gameObject.GetComponent<Image>().sprite = robogirl[19];
+            }
+            if (spriteName == "roboCalm")
+            {
+                portrait2.gameObject.GetComponent<Image>().sprite = robogirl[20];
+            }
+            if (spriteName == "eliseShock")
+            {
+                portrait2.gameObject.GetComponent<Image>().sprite = robogirl[16];
+            }
+
 
             //portrait2.gameObject.GetComponent<Image>().SetNativeSize();
+        }
+
+        public void setElise(string spriteName)
+        {
+            if (cgbackground.gameObject.activeSelf == true)
+            {
+                cgbackground.gameObject.SetActive(false);
+
+            }
+            characterName.GetComponent<TMPro.TextMeshProUGUI>().text = "Elise";
+            characterName.gameObject.SetActive(true);
+            portrait3.gameObject.SetActive(true);
+            portrait3.gameObject.GetComponent<Image>().enabled = true;
+            portrait2.gameObject.SetActive(false);
+            portrait.gameObject.SetActive(false);
+            if (spriteName == "eliseDefiant")
+            {
+                portrait3.gameObject.GetComponent<Image>().sprite = robogirl[14];
+            }
+            if (spriteName == "eliseDisgust")
+            {
+                portrait3.gameObject.GetComponent<Image>().sprite = robogirl[15];
+            }
+            if (spriteName == "eliseShock")
+            {
+                portrait3.gameObject.GetComponent<Image>().sprite = robogirl[16];
+            }
+            if (spriteName == "eliseShockNoGrip")
+            {
+                portrait3.gameObject.GetComponent<Image>().sprite = robogirl[17];
+            }
+            if (spriteName == "eliseYell")
+            {
+                portrait3.gameObject.GetComponent<Image>().sprite = robogirl[18];
+            }
         }
         public void setVex(string spriteName)
         {
@@ -229,6 +377,7 @@ namespace Yarn.Unity
             portrait.gameObject.SetActive(true);
             portrait.gameObject.GetComponent<Image>().enabled = true;
             portrait2.gameObject.SetActive(false);
+            portrait3.gameObject.SetActive(false);
 
             if (spriteName == "vexNeutral")
             {
@@ -261,6 +410,42 @@ namespace Yarn.Unity
             if (spriteName == "vexHappy")
             {
                 portrait.gameObject.GetComponent<Image>().sprite = vex[7];
+            }
+            if (spriteName == "vexContent")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[8];
+            }
+            if (spriteName == "vexCreepy")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[9];
+            }
+            if (spriteName == "vexDesperate")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[10];
+            }
+            if (spriteName == "vexGlassesCreepy")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[11];
+            }
+            if (spriteName == "vexGlassesSmile")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[12];
+            }
+            if (spriteName == "vexQuirky")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[13];
+            }
+            if (spriteName == "vexResigned")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[14];
+            }
+            if (spriteName == "vexShocked")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[15];
+            }
+            if (spriteName == "vexHorrified")
+            {
+                portrait.gameObject.GetComponent<Image>().sprite = vex[16];
             }
             //portrait.gameObject.GetComponent<Image>().SetNativeSize();
         }
@@ -336,7 +521,7 @@ namespace Yarn.Unity
             ma.activatePanel();
             //ma.maintenanceDialogue = (20 - ((6 - seg) * 4)) - 3;
 
-            print("dhmd is " + ma.maintenanceDialogue.ToString());
+            //print("dhmd is " + ma.maintenanceDialogue.ToString());
             ma.segment = seg;
             if(seg == 1)
             {
@@ -410,6 +595,7 @@ namespace Yarn.Unity
             x = "";
             portrait.gameObject.SetActive(false);
             portrait2.gameObject.SetActive(false);
+            portrait3.gameObject.SetActive(false);
         }
 
         public void cutscene1()
